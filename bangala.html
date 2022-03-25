@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>7 lettres</title>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+<SCRIPT LANGUAGE="JavaScript" SRC="szcript.js"></SCRIPT>
+</head>
+<body>
+<div id="wrapper">
+  <div id="header">
+    <h1>Koko.com</h1>
+    Comment il s'appelle ? </div>
+  <ul id="navtop">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="sons.html">Mes Sons</a></li>
+    <li><a href="#">Les NFT</a></li>
+    <li><a href="#">Mes Vêtements</a></li>
+	<li><a href="#">A propos</a></li>
+  </ul>
+  <div id="midcolumn" style="padding-top:15px">
+  <h4>Bangala</h4>
+	<p>Le plus beau son des sons ici en écoute libre.
+	</p>
+	<center>
+	<div style="display: table-cell; vertical-align: bottom; padding-bottom:15px; height:170px; width:300px; background-image: url('images/banagala.png'); background-repeat: no-repeat; background-position: center; background-size: cover;" onload="drawvolumecontroller(20,35,8);">
+	<audio id="$audio" style="vertical-align: 80%;" src="sons/Bangala.mp3"></audio>
+		<div style="top:460px;left:42%;position:absolute;z-index:0;"> 
+			<img src="images/lecteur/play.png" style="height:20px;" onclick="if ($audio.paused) {document.getElementById('$audio').play(); this.setAttribute('src', 'images/lecteur/pause.png');} else {document.getElementById('$audio').pause(); this.setAttribute('src', 'images/lecteur/play.png');} "/>
+			<input aria-label="Current Time" type="range" id="$seekbar" value="0" aria-valuetext="00:00"><span id="current-time">00:00</span>
+		  </div>
+		  <div style="top:325px;left:54%;position:absolute;z-index:1;">
+			<input id="vol-control" type="range" orient="vertical" value="100" min="0" max="100" step="1" oninput="SetVolume(this.value)" onchange="SetVolume(this.value)"><br><img src="images/lecteur/vol.png" style="height:30px;"/>
+		  </div>
+		</div>
+		<a href="#" onClick="javascript:downloadResource('sons/Bangala.mp3')"><img src="images/lecteur/down.png" width="50px" style="padding-top:5px;"/></a>
+	</div>
+	</center>
+    <div id="copyright">Copyright 2032 <a href="#">Koko JP</a><br />
+      Sponsored by <a href="http://opendesigns.org/">Open Designs</a><br />
+      Design by <a href="#">CarHavane</a><br />
+      <a href="http://validator.w3.org/check?uri=referer">Valid XHTML 1.0 Strict</a> </div>
+  </div>
+</div>
+<script>
+// Set max value when you know the duration
+$audio.onloadedmetadata = () => $seekbar.max = $audio.duration
+// update audio position
+$seekbar.onchange = () => $audio.currentTime = $seekbar.value
+// update range input when currentTime updates
+$audio.ontimeupdate = () => $seekbar.value = $audio.currentTime 
+
+$audio.addEventListener('timeupdate',function (){
+
+var sec= new Number();
+var min= new Number();
+ sec = Math.floor( $audio.currentTime );    
+ min = Math.floor( sec / 60 );
+min = min >= 10 ? min : '0' + min;    
+sec = Math.floor( sec % 60 );
+sec = sec >= 10 ? sec : '0' + sec;
+
+document.getElementById('$seekbar').setAttribute('aria-valuetext',min + ":"+ sec);
+document.getElementById('current-time').innerHTML = min + ":"+ sec;
+
+});
+$audio.addEventListener('pause',function (){
+document.getElementById('play').innerHTML = "Play";
+});
+$audio.addEventListener('play',function (){
+document.getElementById('play').innerHTML = "Pause";
+});
+function SetVolume(val)
+    {
+        var player = document.getElementById('$audio');
+        player.volume = val / 100;
+    }
+
+function downloadBlob(blob, filename) {
+  var a = document.createElement('a');
+  a.download = filename;
+  a.href = blob;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+function downloadResource(url) {
+  filename = url.split('\\').pop().split('/').pop();
+  fetch(url, {
+      mode: 'no-cors'
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      let blobUrl = window.URL.createObjectURL(blob);
+      downloadBlob(blobUrl, filename);
+    })
+    .catch(e => console.error(e));
+}
+</script>
+</body>
+</html>
